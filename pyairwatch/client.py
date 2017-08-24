@@ -12,27 +12,30 @@ class AirWatchAPI(object):
             self.username = username
             self.password = password
 
-    def get(self, module, path, version=None, params=None, header=None):
-        """
-        Sents a GET request to the API.
-        Returns the JSON output, or the HTTP response status code if no JSON is returned.
-        """
+    def get(self, module, path, version=None, params=None, header=None, timeout=30):
+        """Sends a GET request to the API. Returns the response object."""
         if header is None:
             header = {}
         header.update(self._build_header(self.username, self.password, self.apikey))
         header.update({'Content-Type': 'application/json'})
-        endpoint = self._build_endpoint(self.env, module, version, path)
+        endpoint = self._build_endpoint(self.env, module, path, version)
         try:
-            r = requests.get(endpoint, params=params, headers=header)
+            r = requests.get(endpoint, params=params, headers=header, timeout=timeout)
             return r
         except AirWatchAPIError as e:
             raise e
 
-    def post(self, module, path, data=None, header=None):
-        """
-        Sents a POST request to the API.
-        Returns the JSON output, or the HTTP response status code if no JSON is returned.
-        """
+    def post(self, module, path, version=None, params=None, data=None, json=None, header=None, timeout=30):
+        """Sends a POST request to the API. Returns the response object."""
+        if header is None:
+            header = {}
+        header.update(self._build_header(self.username, self.password, self.apikey))
+        endpoint = self._build_endpoint(self.env, module, path, version)
+        try:
+            r = requests.post(endpoint, params=params, data=data, json=json, headers=header, timeout=timeout)
+            return r
+        except AirWatchAPIError as e:
+            raise e
 
     @staticmethod
     def _build_endpoint(base_url, module, path=None, version=None):
