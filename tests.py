@@ -4,7 +4,7 @@ import json
 import csv
 
 credentials = []
-with open('creds.txt', 'rU') as datafile:
+with open('creds-temp39.txt', 'rU') as datafile:
     for line in datafile:
         credentials.append(line.strip())
 
@@ -15,26 +15,51 @@ pw = credentials[3]
 
 a = AirWatchAPI(env, token, un, pw)
 
-def get_og_id_test():
-    params = {'groupid':'jr'}
-    response = a.get('system', '/groups/search', params=params)
-    og_id = json.loads(response.text)['LocationGroups'][0]['Id']['Value']
-    print 'OG ID for {}: {}'.format(params.get('groupid'), og_id)
-    return og_id
+def get_og_id_test(groupid):
+    response = a.groups.search(groupid=str(groupid))
+    return response['LocationGroups'][0]['Id']['Value']
 
-def post_create_og_test():
-    ogid = get_og_id_test()
-    rand = random.randint(1111,9999)
-    ogdata = {'GroupId': '%s' % 'apitest{}'.format(rand),
+def post_create_og_test(parentgrpid, newgroupid):
+    ogid = get_og_id_test(parentgrpid)
+    ogdata = {'GroupId': '%s' % str(newgroupid),
               'LocationGroupType': '%s' % 'Container',
-              'Name': '%s' % 'apitest{}'.format(rand)}
-    response = a.post('system', 'groups/{}'.format(ogid), data=json.dumps(ogdata), header={'Content-Type': 'application/json'})
-    og_id = json.loads(response.text).get('Value')
-    print 'OG ID for {}: {}'.format(ogdata.get('GroupId'), og_id)
-    return ogid
+              'Name': '%s' % str(newgroupid)}
+    response = a.groups.create(parent_id=ogid, ogdata=json.dumps(ogdata))
+    print response
+    # og_id = response.get('Value')
+    # print 'OG ID for {}: {}'.format(ogdata.get('GroupId'), og_id)
+    # return og_id
+
+def get_sg_id_test(og_id, sg):
+    params = {'managedbyorganizationgroupid': str(og_id),
+              'orderby': 'smartgroupid'}
+    r = a.get('mdm', '/smartgroups/search?', params=params)
+    for keys in r['SmartGroups']:
+        if keys['Name'] == sg:
+            sg_id = keys.get('SmartGroupID')
+            print 'SG ID for {}: {}'.format(sg, keys.get('SmartGroupID'))
+            return sg_id
+
+def get_device_id_from_serial_test(serial):
+    """TODO"""
+
+def move_device_to_sg_test(serial, sgid):
+    """TODO"""
+    # C02H3SE7DJWT
+    deviceid = get_device_id_from_serial_test(serial)
+    move = {'DeviceAdditions':[{ 'Id':'{}'.format(deviceid)}]}
+    response = a.put('mdm', '/smartgroups/{}'.format(sgid), data=move)
+    print response
 
 def main():
-    post_create_og_test()
+    rand = random.randint(1111,9999)
+    # getogid = get_og_id_test('jr')
+    postogid = post_create_og_test('jr', 'apitest{}'.format(rand))
+    # sg_id = get_sg_id_test(getogid, 'apitest')
+    # move_device_to_sg_test('C02H3SE7DJWT', sg_id)
+
+
+    print postogid
 
 if __name__ == '__main__':
     main()
