@@ -19,8 +19,33 @@ class Groups(object):
 
     def create(self, parent_id, ogdata):
         """Creates a Group and returns the new ID."""
-        response = self._post(path='/groups/{}'.format(parent_id), data=ogdata, header=jheader)
+        response = self._post(path='/groups/{}'.format(parent_id), data=ogdata, header=self.jheader)
         return response
+
+    def create_customer_og(self, groupid, name=None):
+        """Creates a Customer type OG, with a given Group ID and Name, and returns the new ID"""
+        import json
+        new_og = {'GroupId': str(groupid),
+                  'Name': str(name),
+                  'LocationGroupType': 'Customer'}
+        if name is None:
+            new_og['Name'] = str(groupid)
+        response = self.create(parent_id=7, ogdata=json.dumps(new_og))
+        return response.get('Value')
+
+    def create_child_og(self, parent_groupid, groupid, og_type=None, name=None):
+        """Creates a Child OG for a given Parent Group ID, with a given Type, Group ID, and Name, and returns the new ID"""
+        import json
+        pid = self.get_id_from_groupid(parent_groupid)
+        new_og = {'GroupId': str(groupid),
+                  'Name': str(name),
+                  'LocationGroupType': str(og_type)}
+        if name is None:
+            new_og['Name'] = str(groupid)
+        if og_type is None:
+            new_og['LocationGroupType'] = 'Container'
+        response = self.create(parent_id=pid, ogdata=json.dumps(new_og))
+        return response.get('Value')
 
     def _get(self, module='system', path=None, version=None, params=None, header=None):
         """GET requests for the /System/Groups module."""

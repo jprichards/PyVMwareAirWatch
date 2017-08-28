@@ -48,12 +48,22 @@ def move_device_to_sg_test(serial, sgid):
     print response
 
 def main():
-    rand = random.randint(1111,9999)
+    prand = 'apitest{}'.format(random.randint(1111,9999))
+    crand = 'cjr_api{}'.format(random.randint(1111,9999))
+    gcrand = 'gcjr_api{}'.format(random.randint(1111,9999))
     # postogid = post_create_og_test('jr', 'apitest{}'.format(rand))
     # sg_id = get_sg_id_test(getogid, 'apitest')
     # move_device_to_sg_test('C02H3SE7DJWT', sg_id)
     g = a.groups.get_id_from_groupid('jr')
     print 'new test: {}'.format(g)
+
+    n = a.groups.create_customer_og(prand)
+    c = a.groups.create_child_og(prand, crand)
+    gc = a.groups.create_child_og(crand, gcrand)
+
+    print n
+    print c
+    print g
 
     #print postogid
 

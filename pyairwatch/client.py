@@ -61,7 +61,6 @@ class AirWatchAPI(object):
 
     def post(self, module, path, version=None, params=None, data=None, json=None, header=None, timeout=30):
         """Sends a POST request to the API. Returns the response object."""
-        print data
         if header is None:
             header = {}
         header.update(self._build_header(self.username, self.password, self.apikey))
