@@ -15,10 +15,6 @@ pw = credentials[3]
 
 a = AirWatchAPI(env, token, un, pw)
 
-def get_og_id_test(groupid):
-    response = a.groups.search(groupid=str(groupid))
-    return response['LocationGroups'][0]['Id']['Value']
-
 def post_create_og_test(parentgrpid, newgroupid):
     ogid = get_og_id_test(parentgrpid)
     ogdata = {'GroupId': '%s' % str(newgroupid),
@@ -53,13 +49,13 @@ def move_device_to_sg_test(serial, sgid):
 
 def main():
     rand = random.randint(1111,9999)
-    # getogid = get_og_id_test('jr')
-    postogid = post_create_og_test('jr', 'apitest{}'.format(rand))
+    # postogid = post_create_og_test('jr', 'apitest{}'.format(rand))
     # sg_id = get_sg_id_test(getogid, 'apitest')
     # move_device_to_sg_test('C02H3SE7DJWT', sg_id)
+    g = a.groups.get_id_from_groupid('jr')
+    print 'new test: {}'.format(g)
 
-
-    print postogid
+    #print postogid
 
 if __name__ == '__main__':
     main()
