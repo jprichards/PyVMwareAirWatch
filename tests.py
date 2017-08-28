@@ -15,27 +15,6 @@ pw = credentials[3]
 
 a = AirWatchAPI(env, token, un, pw)
 
-def post_create_og_test(parentgrpid, newgroupid):
-    ogid = get_og_id_test(parentgrpid)
-    ogdata = {'GroupId': '%s' % str(newgroupid),
-              'LocationGroupType': '%s' % 'Container',
-              'Name': '%s' % str(newgroupid)}
-    response = a.groups.create(parent_id=ogid, ogdata=json.dumps(ogdata))
-    print response
-    # og_id = response.get('Value')
-    # print 'OG ID for {}: {}'.format(ogdata.get('GroupId'), og_id)
-    # return og_id
-
-def get_sg_id_test(og_id, sg):
-    params = {'managedbyorganizationgroupid': str(og_id),
-              'orderby': 'smartgroupid'}
-    r = a.get('mdm', '/smartgroups/search?', params=params)
-    for keys in r['SmartGroups']:
-        if keys['Name'] == sg:
-            sg_id = keys.get('SmartGroupID')
-            print 'SG ID for {}: {}'.format(sg, keys.get('SmartGroupID'))
-            return sg_id
-
 def get_device_id_from_serial_test(serial):
     """TODO"""
 
@@ -48,24 +27,21 @@ def move_device_to_sg_test(serial, sgid):
     print response
 
 def main():
-    prand = 'apitest{}'.format(random.randint(1111,9999))
-    crand = 'cjr_api{}'.format(random.randint(1111,9999))
-    gcrand = 'gcjr_api{}'.format(random.randint(1111,9999))
-    # postogid = post_create_og_test('jr', 'apitest{}'.format(rand))
-    # sg_id = get_sg_id_test(getogid, 'apitest')
-    # move_device_to_sg_test('C02H3SE7DJWT', sg_id)
+    # prand = 'apitest{}'.format(random.randint(1111,9999))
+    # crand = 'cjr_api{}'.format(random.randint(1111,9999))
+    # gcrand = 'gcjr_api{}'.format(random.randint(1111,9999))
     g = a.groups.get_id_from_groupid('jr')
-    print 'new test: {}'.format(g)
+    sg_id = a.smartgroups.get_id_from_og_id(g, 'apitest')
+    # n = a.groups.create_customer_og(prand)
+    # c = a.groups.create_child_og(prand, crand)
+    # gc = a.groups.create_child_og(crand, gcrand)
+    # print g
+    # print n
+    # print c
+    # print gc
+    # print sg_id
 
-    n = a.groups.create_customer_og(prand)
-    c = a.groups.create_child_og(prand, crand)
-    gc = a.groups.create_child_og(crand, gcrand)
-
-    print n
-    print c
-    print g
-
-    #print postogid
+    # move_device_to_sg_test('C02H3SE7DJWT', sg_id)
 
 if __name__ == '__main__':
     main()

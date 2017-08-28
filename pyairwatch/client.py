@@ -1,8 +1,10 @@
 import base64
 import json
+import logging
 import requests
 from .system.groups import Groups
-import logging
+from .mdm.smartgroups import SmartGroups
+
 
 # Enabling debugging at http.client level (requests->urllib3->http.client)
 # you will see the REQUEST, including HEADERS and DATA, and RESPONSE with HEADERS but without DATA.
@@ -44,6 +46,7 @@ class AirWatchAPI(object):
             self.username = username
             self.password = password
             self.groups = Groups(self)
+            self.smartgroups = SmartGroups(self)
 
     def get(self, module, path, version=None, params=None, header=None, timeout=30):
         """Sends a GET request to the API. Returns the response object."""
