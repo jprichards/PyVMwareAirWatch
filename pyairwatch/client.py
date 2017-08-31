@@ -5,6 +5,8 @@ import requests
 from .system.groups import Groups
 from .mdm.smartgroups import SmartGroups
 from .mdm.devices import Devices
+from .mdm.profiles import Profiles
+from .mdm.tags import Tags
 
 
 # Enabling debugging at http.client level (requests->urllib3->http.client)
@@ -49,6 +51,8 @@ class AirWatchAPI(object):
             self.groups = Groups(self)
             self.smartgroups = SmartGroups(self)
             self.devices = Devices(self)
+            self.profiles = Profiles(self)
+            self.tags = Tags(self)
 
     def get(self, module, path, version=None, params=None, header=None, timeout=30):
         """Sends a GET request to the API. Returns the response object."""
@@ -93,7 +97,7 @@ class AirWatchAPI(object):
     @staticmethod
     def _check_for_error(response):
         """Checks the response for json data, then for an error, then for a status code"""
-        if response.headers.get('Content-Type') in ('application/json', 'application/json; charset=utf-8') :
+        if response.headers.get('Content-Type') in ('application/json', 'application/json; charset=utf-8'):
             json = response.json()
             if json.get('errorCode'):
                 raise AirWatchAPIError(json_response=json)
