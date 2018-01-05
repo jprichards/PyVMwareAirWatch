@@ -1,7 +1,7 @@
 PyVMwareAirWatch
 =========
 
-PyVMwareAirWatch is a Python API library for [VMware AirWatch](https://www.air-watch.com/)
+PyVMwareAirWatch is a Python API library for [VMware AirWatch](https://www.air-watch.com/) 9.1+
 
 Usage:
 ```
