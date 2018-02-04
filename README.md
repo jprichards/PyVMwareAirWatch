@@ -31,13 +31,18 @@ Supported Functionality
 * Devices
   * Get Device Details by Alt ID (Macaddress, Udid, Serialnumber, ImeiNumber, EasId)
   * Get Device ID by Alt ID (Macaddress, Udid, Serialnumber, ImeiNumber, EasId)
+* Users
+  * Search for users by Username, Firstname, Lastname, Email,
+  OrganizationGroupID, or Role
 * Groups
   * Get OG ID from Group ID
   * Create Customer type OG (On-Prem only)
   * Create Child OG
 * Smart Groups
   * Get SG ID by Name and OG ID
-
+* Admins
+  * Search for admins by Username, Firstname, Lastname, Email,
+  OrganizationGroupID, or Role
 
 Requirements
 ---

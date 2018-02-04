@@ -2,23 +2,25 @@ import base64
 import json
 import logging
 import requests
-from .system.groups import Groups
-from .mdm.smartgroups import SmartGroups
 from .mdm.devices import Devices
 from .mdm.profiles import Profiles
+from .mdm.smartgroups import SmartGroups
 from .mdm.tags import Tags
+from .system.admins import Admins
+from .system.groups import Groups
+from .system.users import Users
 
 
 # Enabling debugging at http.client level (requests->urllib3->http.client)
 # you will see the REQUEST, including HEADERS and DATA, and RESPONSE with HEADERS but without DATA.
 # the only thing missing will be the response.body which is not logged.
-try: # for Python 3
+try:
     from http.client import HTTPConnection
 except ImportError:
     from httplib import HTTPConnection
 HTTPConnection.debuglevel = 0
 
-logging.basicConfig() # you need to initialize logging, otherwise you will not see anything from requests
+logging.basicConfig()
 logging.getLogger().setLevel(logging.DEBUG)
 requests_log = logging.getLogger("requests.packages.urllib3")
 requests_log.setLevel(logging.DEBUG)
@@ -53,6 +55,8 @@ class AirWatchAPI(object):
             self.devices = Devices(self)
             self.profiles = Profiles(self)
             self.tags = Tags(self)
+            self.admins = Admins(self)
+            self.users = Users(self)
 
     def get(self, module, path, version=None, params=None, header=None, timeout=30):
         """Sends a GET request to the API. Returns the response object."""
@@ -89,6 +93,20 @@ class AirWatchAPI(object):
         endpoint = self._build_endpoint(self.env, module, path, version)
         try:
             r = requests.put(endpoint, params=params, data=data, json=json, headers=header, timeout=timeout)
+            r = self._check_for_error(r)
+            return r
+        except AirWatchAPIError as e:
+            raise e
+
+    #NOQA
+    def delete(self, module, path, version=None, params=None, header=None, timeout=30):
+        """Sends a DELETE request to the API. Returns the response object."""
+        if header is None:
+            header = {}
+        header.update(self._build_header(self.username, self.password, self.apikey))
+        endpoint = self._build_endpoint(self.env, module, path, version)
+        try:
+            r = requests.delete(endpoint, params=params, headers=header, timeout=timeout)
             r = self._check_for_error(r)
             return r
         except AirWatchAPIError as e:
