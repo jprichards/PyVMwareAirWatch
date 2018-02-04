@@ -13,17 +13,11 @@ a = AirWatchAPI(env='your_environment_url',
                 password='password')
 
 
-# Get the OG ID for a specified Group ID
-a.groups.get_id_from_groupid(groupid='testog')
-
-# Create a Child OG for a specified Parent OG Group ID (Type/Name optional)
-a.groups.create_child_og(parent_groupid='testog', groupid='newog', og_type='Container', name='newog')
-
-# Get the Smart Group ID for a specified OG ID and Smart Group Name
-a.smartgroups.get_id_from_og_id(og_id=7, sg_name='apitest')
-
 # Get a Device ID via an alternate device identifier
 a.devices.get_id_by_alt_id(serialnumber='C09Z1TC8FJWT')
+
+# Get the OG ID for a specified Group ID
+a.groups.get_id_from_groupid(groupid='testog')
 ```
 
 Supported Functionality
@@ -40,9 +34,12 @@ Supported Functionality
   * Create Child OG
 * Smart Groups
   * Get SG ID by Name and OG ID
+  * Get SG Details by ID
 * Admins
   * Search for admins by Username, Firstname, Lastname, Email,
   OrganizationGroupID, or Role
+* Tags
+  * Get Tag ID by Name and OG ID
 
 Requirements
 ---

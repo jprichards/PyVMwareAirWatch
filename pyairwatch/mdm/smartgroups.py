@@ -33,20 +33,33 @@ class SmartGroups(object):
                 sg_id = keys.get('SmartGroupID')
                 return sg_id
 
+    #NOQA
     def move_device_to_sg(self, sg_id, device_id, device_name):
         """Move Device to a Smart Group by Device ID"""
         # sg_details = self.get_details(sg_id)
         # print type(sg_details)
         sg_details = {}
         sg_details[u'DeviceAdditions'] = [{u'Id': str(device_id).decode(), u'Name': str(device_name).decode()}]
+        sg_details[u'CriteriaType'] = 'UserDevice'
         print sg_details
         # device = {'DeviceAdditions':[{ 'Id':'{}'.format(device_id)}]}
-        response = self._post(path='/smartgroups/{}/update'.format(str(sg_id)), data=sg_details)
+        response = self._put(path='/smartgroups/{}'.format(str(sg_id)), data=sg_details)
 
         d = self.get_details(sg_id)
         print d
 
         return response
+
+    #NOQA
+    def add_tag_to_sg(self, sg_id, tag_id, tag_name):
+        sg_details = self.get_details(sg_id)
+        # sg_details = {}
+        sg_details['Tags'] = [{u'Id': str(tag_id).decode(), u'Name': str(tag_name).decode()}]
+        sg_details['Devices'] = 1
+        print sg_details
+
+        response = self._post(path='/smartgroups/{}/update'.format(str(sg_id)), data=sg_details)
+        print response
 
     def _get(self, module='mdm', path=None, version=None, params=None, header=None):
         """GET requests for the /MDM/SmartGroups module."""
