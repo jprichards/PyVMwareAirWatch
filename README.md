@@ -18,6 +18,9 @@ a.devices.get_id_by_alt_id(serialnumber='C09Z1TC8FJWT')
 
 # Get the OG ID for a specified Group ID
 a.groups.get_id_from_groupid(groupid='testog')
+
+# Get the User ID for a specified Username
+a.users.get_id_from_username('jdoe')
 ```
 
 Supported Functionality
@@ -28,6 +31,7 @@ Supported Functionality
 * Users
   * Search for users by Username, Firstname, Lastname, Email,
   OrganizationGroupID, or Role
+  * Get User ID from Username
 * Groups
   * Get OG ID from Group ID
   * Create Customer type OG (On-Prem only)
@@ -38,6 +42,7 @@ Supported Functionality
 * Admins
   * Search for admins by Username, Firstname, Lastname, Email,
   OrganizationGroupID, or Role
+  * Get Admin User ID from Username
 * Tags
   * Get Tag ID by Name and OG ID
 
