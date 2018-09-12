@@ -2,6 +2,9 @@ import base64
 import json
 import logging
 import requests
+from .mam.apps import Apps
+from .mam.blobs import Blobs
+from .mam.internalapps import InternalApps
 from .mdm.devices import Devices
 from .mdm.profiles import Profiles
 from .mdm.smartgroups import SmartGroups
@@ -9,6 +12,7 @@ from .mdm.tags import Tags
 from .system.admins import Admins
 from .system.groups import Groups
 from .system.users import Users
+from .system.featureflag import FeatureFlag
 
 
 # Enabling debugging at http.client level (requests->urllib3->http.client)
