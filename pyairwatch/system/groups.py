@@ -1,3 +1,5 @@
+import json
+
 class Groups(object):
     """
     A class to manage all core functionalities for AirWatch Organization Groups.
@@ -18,9 +20,9 @@ class Groups(object):
         return response['LocationGroups'][0]['Id']['Value']
 
     def get_uuid_from_groupid(self, groupid):
-        """Returns the OG ID for a given Group ID"""
-        response = self.search(groupid=str(groupid))
-        return response['LocationGroups'][0]['Uuid']
+        """Returns the OG UUID for a given Group ID"""
+        response = self._get(path='/groups/{}'.format(groupid))
+        return response['Uuid']
 
     def create(self, parent_id, ogdata):
         """Creates a Group and returns the new ID."""

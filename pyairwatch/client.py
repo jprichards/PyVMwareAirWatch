@@ -61,6 +61,7 @@ class AirWatchAPI(object):
             self.tags = Tags(self)
             self.admins = Admins(self)
             self.users = Users(self)
+            self.featureflag = FeatureFlag(self)
 
     def get(self, module, path, version=None, params=None, header=None, timeout=30):
         """Sends a GET request to the API. Returns the response object."""
