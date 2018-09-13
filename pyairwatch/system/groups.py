@@ -1,5 +1,3 @@
-import json
-
 class Groups(object):
     """
     A class to manage all core functionalities for AirWatch Organization Groups.
