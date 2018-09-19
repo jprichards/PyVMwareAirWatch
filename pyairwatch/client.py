@@ -13,10 +13,12 @@ from .system.admins import Admins
 from .system.groups import Groups
 from .system.users import Users
 from .system.featureflag import FeatureFlag
+from .mdm.ldap import LDAP
 
 
 # Enabling debugging at http.client level (requests->urllib3->http.client)
-# you will see the REQUEST, including HEADERS and DATA, and RESPONSE with HEADERS but without DATA.
+# you will see the REQUEST, including HEADERS and DATA, and RESPONSE with
+# HEADERS but without DATA.
 # the only thing missing will be the response.body which is not logged.
 try:
     from http.client import HTTPConnection
@@ -62,6 +64,7 @@ class AirWatchAPI(object):
             self.admins = Admins(self)
             self.users = Users(self)
             self.featureflag = FeatureFlag(self)
+            self.ldap = LDAP(self)
 
     def get(self, module, path, version=None, params=None, header=None, timeout=30):
         """Sends a GET request to the API. Returns the response object."""

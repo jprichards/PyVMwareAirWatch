@@ -24,7 +24,7 @@ class Groups(object):
 
     def create(self, parent_id, ogdata):
         """Creates a Group and returns the new ID."""
-        response = self._post(path='/groups/{}'.format(parent_id), data=ogdata, header=self.jheader)
+        response = self._post(path='/groups/{}'.format(parent_id), data=ogdata)
         return response
 
     def create_customer_og(self, groupid, name=None):
