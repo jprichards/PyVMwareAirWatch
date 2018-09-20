@@ -2,6 +2,7 @@ class LDAP(object):
     """
     A class to manage functionalities of LDAP Definition.
     """
+    jheader = {'Content-Type': 'application/json'}
 
     def __init__(self, client):
         self.client = client
@@ -11,4 +12,4 @@ class LDAP(object):
         return self.client.post(module=module, path=path, version=version, params=params, data=data, json=json, header=header)
 
     def create_ldap(self, ldap_data):
-        return self._post(path='/enterpriseintegration/ldap', data=ldap_data)
+        return self._post(path='/enterpriseintegration/ldap', json=ldap_data, header=self.jheader)

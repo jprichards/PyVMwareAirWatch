@@ -17,14 +17,19 @@ class Groups(object):
         response = self.search(groupid=str(groupid))
         return response['LocationGroups'][0]['Id']['Value']
 
-    def get_uuid_from_groupid(self, groupid):
+    def get_groupid_from_id(self, id):
+        """Returns the Group ID for a given ID"""
+        response = self._get(path='/groups/{}'.format(id))
+        return response['GroupId']
+
+    def get_uuid_from_groupid(self, id):
         """Returns the OG UUID for a given Group ID"""
-        response = self._get(path='/groups/{}'.format(groupid))
+        response = self._get(path='/groups/{}'.format(id))
         return response['Uuid']
 
     def create(self, parent_id, ogdata):
         """Creates a Group and returns the new ID."""
-        response = self._post(path='/groups/{}'.format(parent_id), data=ogdata)
+        response = self._post(path='/groups/{}'.format(parent_id), data=ogdata, header=self.jheader)
         return response
 
     def create_customer_og(self, groupid, name=None):
