@@ -13,7 +13,9 @@ from .system.admins import Admins
 from .system.groups import Groups
 from .system.users import Users
 from .system.featureflag import FeatureFlag
+from .system.info import Info
 from .mdm.ldap import LDAP
+from .mdm.network import Network
 
 
 # Enabling debugging at http.client level (requests->urllib3->http.client)
@@ -31,7 +33,6 @@ logging.getLogger().setLevel(logging.DEBUG)
 requests_log = logging.getLogger("requests.packages.urllib3")
 requests_log.setLevel(logging.DEBUG)
 requests_log.propagate = True
-
 
 
 class AirWatchAPIError(Exception):
@@ -65,6 +66,8 @@ class AirWatchAPI(object):
             self.users = Users(self)
             self.featureflag = FeatureFlag(self)
             self.ldap = LDAP(self)
+            self.info = Info(self)
+            self.network = Network(self)
 
     def get(self, module, path, version=None, params=None, header=None, timeout=30):
         """Sends a GET request to the API. Returns the response object."""
@@ -94,7 +97,9 @@ class AirWatchAPI(object):
             raise e
 
     def put(self, module, path, version=None, params=None, data=None, json=None, header=None, timeout=30):
-        """Sends a PUT request to the API. Returns the response object."""
+        """
+        Sends a PUT request to the API. Returns the response object.
+        """
         if header is None:
             header = {}
         header.update(self._build_header(self.username, self.password, self.apikey))
@@ -108,7 +113,9 @@ class AirWatchAPI(object):
 
     #NOQA
     def delete(self, module, path, version=None, params=None, header=None, timeout=30):
-        """Sends a DELETE request to the API. Returns the response object."""
+        """
+        Sends a DELETE request to the API. Returns the response object.
+        """
         if header is None:
             header = {}
         header.update(self._build_header(self.username, self.password, self.apikey))
@@ -122,7 +129,10 @@ class AirWatchAPI(object):
 
     @staticmethod
     def _check_for_error(response):
-        """Checks the response for json data, then for an error, then for a status code"""
+        """
+        Checks the response for json data, then for an error, then for
+        a status code
+        """
         if response.headers.get('Content-Type') in ('application/json', 'application/json; charset=utf-8'):
             json = response.json()
             if json.get('errorCode'):
@@ -134,7 +144,9 @@ class AirWatchAPI(object):
 
     @staticmethod
     def _build_endpoint(base_url, module, path=None, version=None):
-        """Builds the full url endpoint for the API request"""
+        """
+        Builds the full url endpoint for the API request
+        """
         if not base_url.startswith('https://'):
             base_url = 'https://' + base_url
         if base_url.endswith('/'):
@@ -150,10 +162,12 @@ class AirWatchAPI(object):
                 return url + '/{}'.format(path)
         return url
 
-
     @staticmethod
     def _build_header(username, password, token, accept='application/json'):
-        """Build the header with base64 login, AW API token, and accept a json response"""
+        """
+        Build the header with base64 login, AW API token,
+        and accept a json response
+        """
         hashed_auth = base64.b64encode('{}:{}'.format(username, password))
         header = {
                   'Authorization': 'Basic {}'.format(hashed_auth.encode('utf-8')),
