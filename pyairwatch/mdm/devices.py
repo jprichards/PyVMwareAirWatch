@@ -11,6 +11,11 @@ class Devices(object):
         response = self._get(path='/devices', params=kwargs)
         return response
 
+    def search_all(self, **kwargs):
+        """Returns the Devices matching the search parameters."""
+        response = self._get(path='/devices/search', params=kwargs)
+        return response
+
     def get_details_by_alt_id(self, serialnumber=None, macaddress=None, udid=None, imeinumber=None, easid=None):
         """Returns the Device information matching the search parameters."""
         params = {}
