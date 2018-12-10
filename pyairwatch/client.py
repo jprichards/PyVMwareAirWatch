@@ -9,6 +9,7 @@ from .mdm.smartgroups import SmartGroups
 from .mdm.tags import Tags
 from .system.admins import Admins
 from .system.groups import Groups
+from .system.usergroups import UserGroups
 from .system.users import Users
 
 
@@ -58,6 +59,7 @@ class AirWatchAPI(object):
             self.tags = Tags(self)
             self.admins = Admins(self)
             self.users = Users(self)
+            self.usergroups = UserGroups(self)
 
     def get(self, module, path, version=None, params=None, header=None, timeout=30):
         """Sends a GET request to the API. Returns the response object."""
