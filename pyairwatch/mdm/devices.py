@@ -1,15 +1,17 @@
-class Devices(object):
+from .mdm import MDM
+
+
+class Devices(MDM):
     """
     A class to manage functionalities of Mobile Device Management (MDM).
     """
 
     def __init__(self, client):
-        self.client = client
+        MDM.__init__(self, client)
 
     def search(self, **kwargs):
         """Returns the Device information matching the search parameters."""
-        response = self._get(path='/devices', params=kwargs)
-        return response
+        return MDM._get(path='/devices', params=kwargs)
 
     def get_details_by_alt_id(self, serialnumber=None, macaddress=None, udid=None, imeinumber=None, easid=None):
         """Returns the Device information matching the search parameters."""
@@ -43,12 +45,31 @@ class Devices(object):
             return None
         return response['Id']['Value']
 
-    def _get(self, module='mdm', path=None, version=None, params=None, header=None):
-        """GET requests for the /MDM/Devices module."""
-        response = self.client.get(module=module, path=path, version=version, params=params, header=header)
-        return response
+    def clear_device_passcode(self, device_id):
+        """
+        Clear the passcode on a device
+        """
+        return MDM._post(self, path='/devices/{}/clearpasscode'.format(device_id))
 
-    def _post(self, module='mdm', path=None, version=None, params=None, data=None, json=None, header=None):
-        """POST requests for the /MDM/Devices module."""
-        response = self.client.post(module=module, path=path, version=version, params=params, data=data, json=json, header=header)
-        return response
+    def commands_for_device_id(self, command, device_id):
+        """
+        Commands for devices selecting device based on id
+        """
+        path = '/devices/{}/commands'.format(device_id)
+        command = 'command=' + command
+        return MDM._post(self, path=path, params=command)
+
+    def send_commands_by_id(self, command, searchby, id):
+        """
+        Commands for devices selecting device based on id
+        """
+        path = '/devices/commands'
+        query = 'command=' + str(command) + '&searchBy=' + str(searchby)
+        query = query + '&id=' + str(id)
+        return MDM._post(self, path=path, params=query)
+
+    def get_details_by_device_id(self, device_id):
+        """
+        device detals by device id
+        """
+        return MDM._get(self, path='/devices/{}'.format(device_id))
