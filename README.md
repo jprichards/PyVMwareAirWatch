@@ -1,7 +1,7 @@
 PyVMwareAirWatch
 =========
 
-PyVMwareAirWatch is a Python API library for [VMware AirWatch](https://www.air-watch.com/) 9.1+
+PyVMwareAirWatch is a Python API library for [VMware AirWatch](https://www.air-watch.com/) 9.1+ (now named Workspace ONE UEM)
 
 Usage:
 ```
@@ -43,6 +43,13 @@ Supported Functionality
 * Admins
   * Search for admins by Username, Firstname, Lastname, Email,
   OrganizationGroupID, or Role
+* User Groups
+  * Search for user groups
+  * Search for users within a user group
+* Tags
+  * Get Tag ID from Tag Name
+* Profiles
+  * Search for profiles by Type, Name, OG ID, Platform, Status, or Ownership
 
 Requirements
 ---
