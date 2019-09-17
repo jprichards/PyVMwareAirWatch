@@ -25,6 +25,11 @@ class SmartGroups(object):
         response = self._get(path='/smartgroups/{}'.format(id))
         return response
 
+    def get_devices(self, id):
+        """Retrieves all devices from Smart Group"""
+        devices = self._get(path='/smartgroups/{}/devices'.format(id))
+        return devices
+
     def get_id_from_og_id(self, og_id, sg_name):
         """Returns the Smart Group ID for a given SG Name & OG ID"""
         response = self.search(managedbyorganizationgroupid=str(og_id), orderby='smartgroupid')
