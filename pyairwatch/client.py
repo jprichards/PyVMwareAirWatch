@@ -55,22 +55,22 @@ class AirWatchAPIError(Exception):
 
 class AirWatchAPI(object):
     def __init__(self, env, apikey, username, password):
-            self.env = env
-            self.apikey = apikey
-            self.username = username
-            self.password = password
-            self.groups = Groups(self)
-            self.smartgroups = SmartGroups(self)
-            self.devices = Devices(self)
-            self.profiles = Profiles(self)
-            self.tags = Tags(self)
-            self.admins = Admins(self)
-            self.users = Users(self)
-            self.usergroups = UserGroups(self)
-            self.featureflag = FeatureFlag(self)
-            self.ldap = LDAP(self)
-            self.info = Info(self)
-            self.network = Network(self)
+        self.env = env
+        self.apikey = apikey
+        self.username = username
+        self.password = password
+        self.groups = Groups(self)
+        self.smartgroups = SmartGroups(self)
+        self.devices = Devices(self)
+        self.profiles = Profiles(self)
+        self.tags = Tags(self)
+        self.admins = Admins(self)
+        self.users = Users(self)
+        self.usergroups = UserGroups(self)
+        self.featureflag = FeatureFlag(self)
+        self.ldap = LDAP(self)
+        self.info = Info(self)
+        self.network = Network(self)
 
     def get(self, module, path, version=None, params=None, header=None,
             timeout=30):
@@ -78,7 +78,7 @@ class AirWatchAPI(object):
         if header is None:
             header = {}
         header.update(self._build_header(self.username, self.password,
-                      self.apikey))
+                                         self.apikey))
         header.update({'Content-Type': 'application/json'})
         endpoint = self._build_endpoint(self.env, module, path, version)
         try:
@@ -91,11 +91,13 @@ class AirWatchAPI(object):
 
     def post(self, module, path, version=None, params=None, data=None,
              json=None, header=None, timeout=30):
-        """Sends a POST request to the API. Returns the response object."""
+        """
+        Sends a POST request to the API. Returns the response object.
+        """
         if header is None:
             header = {}
         header.update(self._build_header(self.username, self.password,
-                      self.apikey))
+                                         self.apikey))
         endpoint = self._build_endpoint(self.env, module, path, version)
         try:
             r = requests.post(endpoint, params=params, data=data, json=json,
@@ -113,7 +115,7 @@ class AirWatchAPI(object):
         if header is None:
             header = {}
         header.update(self._build_header(self.username, self.password,
-                      self.apikey))
+                                         self.apikey))
         endpoint = self._build_endpoint(self.env, module, path, version)
         try:
             r = requests.put(endpoint, params=params, data=data, json=json,
@@ -131,7 +133,7 @@ class AirWatchAPI(object):
         if header is None:
             header = {}
         header.update(self._build_header(self.username, self.password,
-                      self.apikey))
+                                         self.apikey))
         endpoint = self._build_endpoint(self.env, module, path, version)
         try:
             r = requests.patch(endpoint, params=params, data=data, json=json,
@@ -140,7 +142,8 @@ class AirWatchAPI(object):
             return r
         except AirWatchAPIError as e:
             raise e
-    #NOQA
+    # NOQA
+
     def delete(self, module, path, version=None, params=None, header=None,
                timeout=30):
         """
@@ -149,7 +152,7 @@ class AirWatchAPI(object):
         if header is None:
             header = {}
         header.update(self._build_header(self.username, self.password,
-                      self.apikey))
+                                         self.apikey))
         endpoint = self._build_endpoint(self.env, module, path, version)
         try:
             r = requests.delete(endpoint, params=params, headers=header,
@@ -166,7 +169,7 @@ class AirWatchAPI(object):
         a status code
         """
         if response.headers.get('Content-Type') in ('application/json',
-                                'application/json; charset=utf-8'):
+                                                    'application/json; charset=utf-8'):
             json = response.json()
             if json.get('errorCode'):
                 raise AirWatchAPIError(json_response=json)
@@ -198,13 +201,13 @@ class AirWatchAPI(object):
     @staticmethod
     def _build_header(username, password, token, accept='application/json'):
         """
-        Build the header with base64 login, AW API token, 
+        Build the header with base64 login, AW API token,
         and accept a json response
         """
         hashed_auth = base64.b64encode((username + ':' + password).encode('utf8')).decode("utf-8")
         header = {
-                  'Authorization': 'Basic {}'.format(hashed_auth),
-                  'aw-tenant-code': token,
-                  'Accept': accept
-                 }
+            'Authorization': 'Basic {}'.format(hashed_auth),
+            'aw-tenant-code': token,
+            'Accept': accept
+        }
         return header
