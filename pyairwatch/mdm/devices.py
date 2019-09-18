@@ -13,6 +13,11 @@ class Devices(MDM):
         """Returns the Device information matching the search parameters."""
         return MDM._get(self, path='/devices', params=kwargs)
 
+    def search_all(self, **kwargs):
+        """Returns the Devices matching the search parameters."""
+        response = MDM._get(self, path='/devices/search', params=kwargs)
+        return response
+
     def get_details_by_alt_id(self, serialnumber=None, macaddress=None,
                               udid=None, imeinumber=None, easid=None):
         """Returns the Device information matching the search parameters."""

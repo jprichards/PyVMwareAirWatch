@@ -25,6 +25,11 @@ class SmartGroups(object):
         response = self._get(path='/smartgroups/{}'.format(id))
         return response
 
+    def get_devices(self, id):
+        """Retrieves all devices from Smart Group"""
+        devices = self._get(path='/smartgroups/{}/devices'.format(id))
+        return devices
+
     def get_id_from_og_id(self, og_id, sg_name):
         """Returns the Smart Group ID for a given SG Name & OG ID"""
         response = self.search(managedbyorganizationgroupid=str(og_id), orderby='smartgroupid')
@@ -39,12 +44,12 @@ class SmartGroups(object):
         # print type(sg_details)
         sg_details = {}
         sg_details[u'DeviceAdditions'] = [{u'Id': str(device_id).decode(), u'Name': str(device_name).decode()}]
-        print sg_details
+        print(sg_details)
         # device = {'DeviceAdditions':[{ 'Id':'{}'.format(device_id)}]}
         response = self._post(path='/smartgroups/{}/update'.format(str(sg_id)), data=sg_details)
 
         d = self.get_details(sg_id)
-        print d
+        print(d)
 
         return response
 

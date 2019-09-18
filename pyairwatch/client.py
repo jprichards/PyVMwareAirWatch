@@ -1,3 +1,4 @@
+from __future__ import print_function
 import base64
 import json
 import logging
@@ -11,6 +12,7 @@ from .mdm.smartgroups import SmartGroups
 from .mdm.tags import Tags
 from .system.admins import Admins
 from .system.groups import Groups
+from .system.usergroups import UserGroups
 from .system.users import Users
 from .system.featureflag import FeatureFlag
 from .system.info import Info
@@ -64,6 +66,7 @@ class AirWatchAPI(object):
             self.tags = Tags(self)
             self.admins = Admins(self)
             self.users = Users(self)
+            self.usergroups = UserGroups(self)
             self.featureflag = FeatureFlag(self)
             self.ldap = LDAP(self)
             self.info = Info(self)
@@ -195,13 +198,13 @@ class AirWatchAPI(object):
     @staticmethod
     def _build_header(username, password, token, accept='application/json'):
         """
-        Build the header with base64 login, AW API token,
+        Build the header with base64 login, AW API token, 
         and accept a json response
         """
-        hashed_auth = base64.b64encode('{}:{}'.format(username, password))
+        hashed_auth = base64.b64encode((username + ':' + password).encode('utf8')).decode("utf-8")
         header = {
-                  'Authorization': 'Basic {}'.format(hashed_auth.encode('utf-8')),
-                  'aw-tenant-code': token.encode('utf-8'),
+                  'Authorization': 'Basic {}'.format(hashed_auth),
+                  'aw-tenant-code': token,
                   'Accept': accept
                  }
         return header
