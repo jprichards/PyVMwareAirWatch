@@ -44,13 +44,10 @@ class SmartGroups(MDM):
 
     def move_device_to_sg(self, sg_id, device_id, device_name):
         """Move Device to a Smart Group by Device ID"""
-        # sg_details = self.get_details(sg_id)
-        # print type(sg_details)
         sg_details = {}
         sg_details[u'DeviceAdditions'] = [{u'Id': str(device_id).decode(),
                                            u'Name': str(device_name).decode()}]
         print(sg_details)
-        # device = {'DeviceAdditions':[{ 'Id':'{}'.format(device_id)}]}
         path = '/smartgroups/{}/update'.format(str(sg_id))
         response = MDM._post(self, path=path, data=sg_details)
 
