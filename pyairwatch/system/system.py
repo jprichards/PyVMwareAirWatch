@@ -7,7 +7,9 @@ class System(object):
 
     def _get(self, module='system', path=None,
              version=None, params=None, header=None):
-        """GET requests for base system endpoints"""
+        """
+        GET requests for base system endpoints
+        """
         return self.client.get(module=module, path=path,
                                version=version, params=params, header=header)
 
