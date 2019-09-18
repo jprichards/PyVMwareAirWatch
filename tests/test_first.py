@@ -1,13 +1,17 @@
 import pyairwatch.client
+import unittest
 
 
-def setup():
-    print "SETUP!"
+class TestBasicTests(unittest.TestCase):
+    def setUP(self):
+        print("SETUP!")
+
+    def teardown(self):
+        print("TEAR DOWN!")
+
+    def test_basic(self):
+        self.assert_(True, "I RAN!")
 
 
-def teardown():
-    print "TEAR DOWN!"
-
-
-def test_basic():
-    print "I RAN!"
+if __name__ == '__main__':
+    unittest.main()
