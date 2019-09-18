@@ -69,59 +69,88 @@ class AirWatchAPI(object):
             self.info = Info(self)
             self.network = Network(self)
 
-    def get(self, module, path, version=None, params=None, header=None, timeout=30):
+    def get(self, module, path, version=None, params=None, header=None,
+            timeout=30):
         """Sends a GET request to the API. Returns the response object."""
         if header is None:
             header = {}
-        header.update(self._build_header(self.username, self.password, self.apikey))
+        header.update(self._build_header(self.username, self.password,
+                      self.apikey))
         header.update({'Content-Type': 'application/json'})
         endpoint = self._build_endpoint(self.env, module, path, version)
         try:
-            r = requests.get(endpoint, params=params, headers=header, timeout=timeout)
+            r = requests.get(endpoint, params=params, headers=header,
+                             timeout=timeout)
             r = self._check_for_error(r)
             return r
         except AirWatchAPIError as e:
             raise e
 
-    def post(self, module, path, version=None, params=None, data=None, json=None, header=None, timeout=30):
+    def post(self, module, path, version=None, params=None, data=None,
+             json=None, header=None, timeout=30):
         """Sends a POST request to the API. Returns the response object."""
         if header is None:
             header = {}
-        header.update(self._build_header(self.username, self.password, self.apikey))
+        header.update(self._build_header(self.username, self.password,
+                      self.apikey))
         endpoint = self._build_endpoint(self.env, module, path, version)
         try:
-            r = requests.post(endpoint, params=params, data=data, json=json, headers=header, timeout=timeout)
+            r = requests.post(endpoint, params=params, data=data, json=json,
+                              headers=header, timeout=timeout)
             r = self._check_for_error(r)
             return r
         except AirWatchAPIError as e:
             raise e
 
-    def put(self, module, path, version=None, params=None, data=None, json=None, header=None, timeout=30):
+    def put(self, module, path, version=None, params=None, data=None,
+            json=None, header=None, timeout=30):
         """
         Sends a PUT request to the API. Returns the response object.
         """
         if header is None:
             header = {}
-        header.update(self._build_header(self.username, self.password, self.apikey))
+        header.update(self._build_header(self.username, self.password,
+                      self.apikey))
         endpoint = self._build_endpoint(self.env, module, path, version)
         try:
-            r = requests.put(endpoint, params=params, data=data, json=json, headers=header, timeout=timeout)
+            r = requests.put(endpoint, params=params, data=data, json=json,
+                             headers=header, timeout=timeout)
             r = self._check_for_error(r)
             return r
         except AirWatchAPIError as e:
             raise e
 
+    def patch(self, module, path, version=None, params=None, data=None,
+              json=None, header=None, timeout=30):
+        """
+        Sends a Patch request to the API. Returns the response object.
+        """
+        if header is None:
+            header = {}
+        header.update(self._build_header(self.username, self.password,
+                      self.apikey))
+        endpoint = self._build_endpoint(self.env, module, path, version)
+        try:
+            r = requests.patch(endpoint, params=params, data=data, json=json,
+                               headers=header, timeout=timeout)
+            r = self._check_for_error(r)
+            return r
+        except AirWatchAPIError as e:
+            raise e
     #NOQA
-    def delete(self, module, path, version=None, params=None, header=None, timeout=30):
+    def delete(self, module, path, version=None, params=None, header=None,
+               timeout=30):
         """
         Sends a DELETE request to the API. Returns the response object.
         """
         if header is None:
             header = {}
-        header.update(self._build_header(self.username, self.password, self.apikey))
+        header.update(self._build_header(self.username, self.password,
+                      self.apikey))
         endpoint = self._build_endpoint(self.env, module, path, version)
         try:
-            r = requests.delete(endpoint, params=params, headers=header, timeout=timeout)
+            r = requests.delete(endpoint, params=params, headers=header,
+                                timeout=timeout)
             r = self._check_for_error(r)
             return r
         except AirWatchAPIError as e:
@@ -133,7 +162,8 @@ class AirWatchAPI(object):
         Checks the response for json data, then for an error, then for
         a status code
         """
-        if response.headers.get('Content-Type') in ('application/json', 'application/json; charset=utf-8'):
+        if response.headers.get('Content-Type') in ('application/json',
+                                'application/json; charset=utf-8'):
             json = response.json()
             if json.get('errorCode'):
                 raise AirWatchAPIError(json_response=json)

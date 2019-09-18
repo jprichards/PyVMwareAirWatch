@@ -13,7 +13,8 @@ class Devices(MDM):
         """Returns the Device information matching the search parameters."""
         return MDM._get(self, path='/devices', params=kwargs)
 
-    def get_details_by_alt_id(self, serialnumber=None, macaddress=None, udid=None, imeinumber=None, easid=None):
+    def get_details_by_alt_id(self, serialnumber=None, macaddress=None,
+                              udid=None, imeinumber=None, easid=None):
         """Returns the Device information matching the search parameters."""
         params = {}
         if serialnumber:
@@ -30,7 +31,8 @@ class Devices(MDM):
             return None
         return response
 
-    def get_id_by_alt_id(self, serialnumber=None, macaddress=None, udid=None, imeinumber=None, easid=None):
+    def get_id_by_alt_id(self, serialnumber=None, macaddress=None, udid=None,
+                         imeinumber=None, easid=None):
         if serialnumber:
             response = self.search(searchby='Serialnumber', id=str(serialnumber))
         elif macaddress:
@@ -49,7 +51,8 @@ class Devices(MDM):
         """
         Clear the passcode on a device
         """
-        return MDM._post(self, path='/devices/{}/clearpasscode'.format(device_id))
+        return MDM._post(self,
+                         path='/devices/{}/clearpasscode'.format(device_id))
 
     def send_commands_for_device_id(self, command, device_id):
         """
@@ -99,7 +102,8 @@ class Devices(MDM):
         _params = 'searchby={}&id={}'.format(searchby, id)
         return MDM._get(self, path=_path, params=_params)
 
-    def get_bulk_security_info(self, organization_group_id, user_name, params=None):
+    def get_bulk_security_info(self, organization_group_id, user_name,
+                               params=None):
         """
         Processes the information like organizationgroup ID, user name, model,
         platform, last seen, ownership, compliant status, seen since parameters
@@ -109,3 +113,10 @@ class Devices(MDM):
         _query = 'organizationgroupid={}&user={}'.format(organization_group_id,
                                                          user_name)
         return MDM._get(self, path=_path, params=_query)
+
+    def switch_device_from_staging_to_user(self, device_id, user_id):
+        """
+        API for Single Staging switch to directory or basic user
+        """
+        _path = "/devices/{}/enrollmentuser/{}".format(device_id, user_id)
+        return MDM._patch(self, path=_path)
