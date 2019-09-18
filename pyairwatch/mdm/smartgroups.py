@@ -1,7 +1,7 @@
 from .mdm import MDM
 
 
-class SmartGroups(object):
+class SmartGroups(MDM):
     """
     A class to manage AirWatch Smart Groups.
     """
