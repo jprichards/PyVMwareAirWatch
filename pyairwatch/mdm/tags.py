@@ -9,6 +9,6 @@ class Tags(MDM):
 
     def get_id_by_name(self, name, og_id):
         """mdm/tags/search?name={name}"""
-        params = {'name': str(name), 'organizationgroupid': str(og_id)}
-        response = MDM._get(self, path='/tags/search', params=params)
+        _params = {'name': str(name), 'organizationgroupid': str(og_id)}
+        response = MDM._get(self, path='/tags/search', params=_params)
         return response

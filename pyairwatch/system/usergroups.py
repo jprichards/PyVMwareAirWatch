@@ -5,7 +5,6 @@ class UserGroups(System):
     """
     A class to manage all core functionalities for AirWatch Organization Groups.
     """
-    jheader = {'Content-Type': 'application/json'}
 
     def __init__(self, client):
         System.__init__(self, client)
@@ -17,6 +16,6 @@ class UserGroups(System):
 
     def search_users(self, id, **kwargs):
         """Retrieves list of users from the provided user group id."""
-        response = System._get(self, path='/usergroups/{}/users'.format(id),
-                               params=kwargs)
+        _path = '/usergroups/{}/users'.format(id)
+        response = System._get(self, path=_path, params=kwargs)
         return response
