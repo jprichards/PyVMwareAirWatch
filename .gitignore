@@ -2,3 +2,5 @@
 *.egg-info
 .idea
 venv
+enviroments.json
+environments.json

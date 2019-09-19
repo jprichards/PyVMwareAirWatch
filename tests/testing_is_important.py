@@ -6,7 +6,7 @@ import json
 class TestBasicTests(unittest.TestCase):
     def setUp(self):
         input = "cnaapp"
-        with open("enviroments.json") as json_file:
+        with open("environments.json") as json_file:
             server_details = json.load(json_file)
         self.enviroment = AirWatchAPI(env=server_details[input]["server"],
                                       apikey=server_details[input]["apikey"],
