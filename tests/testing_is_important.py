@@ -16,7 +16,7 @@ class TestBasicTests(unittest.TestCase):
     def teardown(self):
         print("TEAR DOWN!")
 
-    def test_basic(self):
+    def test_is_this_AirWatch(self):
         response = self.enviroment.info.get_enviroment_info()
         self.assertEqual(response["ProductName"], "AirWatch Platform Service",
                          "Info API ran")

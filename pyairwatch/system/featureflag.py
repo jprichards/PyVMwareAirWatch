@@ -5,19 +5,20 @@ class FeatureFlag(System):
     """
     For Feature Flags
     """
+
     def __init__(self, client):
         System.__init__(self, client)
 
-    def set_flag(self, feature_flag, og_uuid, override):
+    def set_feature_flag(self, feature_flag, og_uuid, override):
         """Set the Feature Flag"""
-        path = '/featureFlag/{}/{}/{}'.format(feature_flag, og_uuid, override)
-        return System._post(self, path=path)
+        _path = '/featureFlag/{}/{}/{}'.format(feature_flag, og_uuid, override)
+        return System._post(self, path=_path)
 
-    def get_status(self, feature_flag, og_uuid):
+    def get_feature_flag_status(self, feature_flag, og_uuid):
         """GET a specific Feature Flag status"""
-        path = '/featureFlag/{}/{}'.format(feature_flag, og_uuid)
-        return System._get(self, path=path)
+        _path = '/featureFlag/{}/{}'.format(feature_flag, og_uuid)
+        return System._get(self, path=_path)
 
-    def og_status(self, og_uuid):
+    def list_feature_flags_by_og(self, og_uuid):
         """GET all Feature Flags for a particular OG need UUID"""
         return System._get(self, path='/featureFlag/{}'.format(og_uuid))

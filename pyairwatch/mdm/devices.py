@@ -71,11 +71,11 @@ class Devices(MDM):
         """
         Commands for devices selecting device based on id
         """
-        path = '/devices/commands'
-        query = 'command={}&searchBy={}&id={}'.format(str(command),
-                                                      str(searchby),
-                                                      str(id))
-        return MDM._post(self, path=path, params=query)
+        _path = '/devices/commands'
+        _query = 'command={}&searchBy={}&id={}'.format(str(command),
+                                                       str(searchby),
+                                                       str(id))
+        return MDM._post(self, path=_path, params=_query)
 
     def get_details_by_device_id(self, device_id):
         """
