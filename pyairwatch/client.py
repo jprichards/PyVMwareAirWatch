@@ -1,23 +1,21 @@
-from __future__ import print_function
+from __future__ import print_function, absolute_import
 import base64
-import json
 import logging
 import requests
-from .mam.apps import Apps
-from .mam.blobs import Blobs
-from .mam.internalapps import InternalApps
-from .mdm.devices import Devices
-from .mdm.profiles import Profiles
-from .mdm.smartgroups import SmartGroups
-from .mdm.tags import Tags
-from .system.admins import Admins
-from .system.groups import Groups
-from .system.usergroups import UserGroups
-from .system.users import Users
-from .system.featureflag import FeatureFlag
-from .system.info import Info
-from .mdm.ldap import LDAP
-from .mdm.network import Network
+from pyairwatch.error import AirWatchAPIError
+from pyairwatch.mdm.devices import Devices
+from pyairwatch.mdm.profiles import Profiles
+from pyairwatch.mdm.smartgroups import SmartGroups
+from pyairwatch.mdm.tags import Tags
+from pyairwatch.mdm.ldap import LDAP
+from pyairwatch.mdm.network import Network
+from pyairwatch.system.admins import Admins
+from pyairwatch.system.groups import Groups
+from pyairwatch.system.usergroups import UserGroups
+from pyairwatch.system.users import Users
+from pyairwatch.system.featureflag import FeatureFlag
+from pyairwatch.system.info import Info
+
 
 
 # Enabling debugging at http.client level (requests->urllib3->http.client)
@@ -30,27 +28,15 @@ except ImportError:
     from httplib import HTTPConnection
 HTTPConnection.debuglevel = 0
 
+#todo: programing using library should be able to set logging level
+#todo: Implement logging to using config https://docs.python.org/3/howto/logging.html#configuring-logging
+#todo: sett logging correclty for a library https://docs.python.org/3/howto/logging.html#configuring-logging-for-a-library
 logging.basicConfig()
 logging.getLogger().setLevel(logging.DEBUG)
 requests_log = logging.getLogger("requests.packages.urllib3")
 requests_log.setLevel(logging.DEBUG)
 requests_log.propagate = True
 
-
-class AirWatchAPIError(Exception):
-    def __init__(self, json_response=None):
-        if json_response is None:
-            pass
-        else:
-            self.response = json_response
-            self.error_code = json_response.get('errorCode')
-            self.error_msg = str(json_response.get('message'))
-            if self.error_code is None:
-                self.error_code = 0
-                self.error_msg = 'Unknown API error occurred'
-
-    def __str__(self):
-        return 'Error #{}: {}'.format(self.error_code, self.error_msg)
 
 
 class AirWatchAPI(object):
@@ -74,7 +60,9 @@ class AirWatchAPI(object):
 
     def get(self, module, path, version=None, params=None, header=None,
             timeout=30):
-        """Sends a GET request to the API. Returns the response object."""
+        """
+        Sends a GET request to the API. Returns the response object.
+        """
         if header is None:
             header = {}
         header.update(self._build_header(self.username, self.password,
@@ -142,6 +130,7 @@ class AirWatchAPI(object):
             return r
         except AirWatchAPIError as e:
             raise e
+
     # NOQA
 
     def delete(self, module, path, version=None, params=None, header=None,

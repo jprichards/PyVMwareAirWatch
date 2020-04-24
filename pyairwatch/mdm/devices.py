@@ -125,3 +125,11 @@ class Devices(MDM):
         """
         _path = "/devices/{}/enrollmentuser/{}".format(device_id, user_id)
         return MDM._patch(self, path=_path)
+
+    def get_managed_admin_account_by_uuid(self, device_id):
+        """
+        Get information of the administrator account configured on a macOS
+        device via device enrollment program (DEP).
+        """
+        _path = "/devices/{}/security/managed-admin-information".format(device_id)
+        return MDM._get(self, path=_path)

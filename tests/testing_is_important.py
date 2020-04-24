@@ -2,6 +2,7 @@ from pyairwatch.client import AirWatchAPI
 import unittest
 import json
 
+#convert to pytest
 
 class TestBasicTests(unittest.TestCase):
     def setUp(self):
@@ -20,7 +21,7 @@ class TestBasicTests(unittest.TestCase):
         response = self.enviroment.info.get_enviroment_info()
         self.assertEqual(response["ProductName"], "AirWatch Platform Service",
                          "Info API ran")
-
+#todo: more tests
 
 if __name__ == '__main__':
     unittest.main()

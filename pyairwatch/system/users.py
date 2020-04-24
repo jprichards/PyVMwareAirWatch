@@ -21,4 +21,9 @@ class Users(System):
             organizationgroupid={locationgroupid}
             role={role}
         """
-        return System._get(path='/users/search', params=kwargs)
+        return System._get(self, path='/users/search', params=kwargs)
+
+    def create_device_regestration_to_user(self, user_id, register_device_details):
+        path = '/users{}/registerdevice'.format(user_id)
+        responce = System._post(path=path, data=register_device_details)
+        return responce
