@@ -79,13 +79,13 @@ class Devices(MDM):
 
     def get_details_by_device_id(self, device_id):
         """
-        device detals by device id
+        device details by device id
         """
         return MDM._get(self, path='/devices/{}'.format(device_id))
 
-    def get_device_filevualt_recovery_key(self, device_uuid):
+    def get_device_filevault_recovery_key(self, device_uuid):
         """
-        Gets a maccOS device's FileVualt Recovery Key
+        Gets a macOS device's FileVault Recovery Key
         """
         _path = '/devices/{}/security/recovery-key'.format(device_uuid)
         return MDM._get(self, path=_path)
@@ -98,10 +98,10 @@ class Devices(MDM):
         _path = '/devices/{}/security'.format(device_id)
         return MDM._get(self, path=_path)
 
-    def get_security_info_by_atlternat_id(self, searchby, id):
+    def get_security_info_by_alternate_id(self, searchby, id):
         """
         Processes the device ID to retrieve the security
-        information sample related info by Alternater ID
+        information sample related info by Alternate ID
         """
         _path = '/devices/security'
         _params = 'searchby={}&id={}'.format(searchby, id)
@@ -110,7 +110,7 @@ class Devices(MDM):
     def get_bulk_security_info(self, organization_group_id, user_name,
                                params=None):
         """
-        Processes the information like organizationgroup ID, user name, model,
+        Processes the information like organization group ID, user name, model,
         platform, last seen, ownership, compliant status, seen since parameters
         and fetches the security information for the same.
         """
