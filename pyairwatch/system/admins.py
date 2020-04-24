@@ -23,7 +23,7 @@ class Admins(System):
         response = System._get(self, path='/admins/search', params=kwargs)
         return response
 
-    def create_adim_v1(self, user_data):
+    def create_admin_v1(self, user_data):
         """
         Performs necessary checks and Create a new basic Admin user.
         """

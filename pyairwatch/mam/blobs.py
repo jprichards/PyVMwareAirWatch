@@ -1,7 +1,7 @@
 from .mam import MAM
 
 
-class Blobs(object):
+class Blobs(MAM):
     """
     A class to manage Blobs
     """
