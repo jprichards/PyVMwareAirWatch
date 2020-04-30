@@ -21,7 +21,6 @@ class Devices(MDM):
     def get_details_by_alt_id(self, serialnumber=None, macaddress=None,
                               udid=None, imeinumber=None, easid=None):
         """Returns the Device information matching the search parameters."""
-        params = {}
         if serialnumber:
             response = self.search(searchby='Serialnumber', id=str(serialnumber))
         elif macaddress:
@@ -38,18 +37,7 @@ class Devices(MDM):
 
     def get_id_by_alt_id(self, serialnumber=None, macaddress=None, udid=None,
                          imeinumber=None, easid=None):
-        if serialnumber:
-            response = self.search(searchby='Serialnumber', id=str(serialnumber))
-        elif macaddress:
-            response = self.search(searchby='Macaddress', id=str(macaddress))
-        elif udid:
-            response = self.search(searchby='Udid', id=str(udid))
-        elif imeinumber:
-            response = self.search(searchby='ImeiNumber', id=str(imeinumber))
-        elif easid:
-            response = self.search(searchby='EasId', id=str(easid))
-        else:
-            return None
+        response = self.get_details_by_alt_id(serialnumber, macaddress, udid, imeinumber, easid)
         return response['Id']['Value']
 
     def clear_device_passcode(self, device_id):
@@ -133,3 +121,10 @@ class Devices(MDM):
         """
         _path = "/devices/{}/security/managed-admin-information".format(device_id)
         return MDM._get(self, path=_path)
+
+    def delete_device_by_id(self, device_id):
+        """
+        :param device_id:
+        :return: API response
+        """
+        return MDM._delete(self, path='/devices/{}'.format(device_id))
