@@ -20,14 +20,14 @@ class SmartGroups(object):
         response = self._get(path='/smartgroups/search', params=kwargs)
         return response
 
-    def get_details(self, id):
+    def get_details(self, id, **kwargs):
         """Retrieves the Smart Group details created in an Organization Group"""
-        response = self._get(path='/smartgroups/{}'.format(id))
+        response = self._get(path='/smartgroups/{}'.format(id), params=kwargs)
         return response
 
-    def get_devices(self, id):
+    def get_devices(self, id, **kwargs):
         """Retrieves all devices from Smart Group"""
-        devices = self._get(path='/smartgroups/{}/devices'.format(id))
+        devices = self._get(path='/smartgroups/{}/devices'.format(id), params=kwargs)
         return devices
 
     def get_id_from_og_id(self, og_id, sg_name):
