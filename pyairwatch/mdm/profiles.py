@@ -36,3 +36,7 @@ class Profiles(MDM):
 
     def get_profile_by_id(self, profile_id):
         return MDM._get(self, path='/profiles/{}'.format(profile_id), version=2)
+
+    def get_payload_keys(self, platform, payload):
+        path = '/profiles/platforms/{}/payloads/{}/getpayloadkeys'.format(platform, payload)
+        return MDM._get(self, path=path, version=2)
