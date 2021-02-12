@@ -31,7 +31,7 @@ HTTPConnection.debuglevel = 0
 
 #todo: programing using library should be able to set logging level
 #todo: Implement logging to using config https://docs.python.org/3/howto/logging.html#configuring-logging
-#todo: sett logging correclty for a library https://docs.python.org/3/howto/logging.html#configuring-logging-for-a-library
+#todo: set logging correclty for a library https://docs.python.org/3/howto/logging.html#configuring-logging-for-a-library
 logging.basicConfig()
 logging.getLogger().setLevel(logging.DEBUG)
 requests_log = logging.getLogger("requests.packages.urllib3")
@@ -132,8 +132,6 @@ class AirWatchAPI(object):
             return r
         except AirWatchAPIError as e:
             raise e
-
-    # NOQA
 
     def delete(self, module, path, version=None, params=None, header=None,
                timeout=30):

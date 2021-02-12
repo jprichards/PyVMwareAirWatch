@@ -24,6 +24,9 @@ class Users(System):
         return System._get(self, path='/users/search', params=kwargs)
 
     def create_device_registration_to_user(self, user_id, register_device_details):
+        """
+        Creates a registration record for a user with the provided device details
+        """
         path = '/users{}/registerdevice'.format(user_id)
         response = System._post(path=path, data=register_device_details)
         return response
