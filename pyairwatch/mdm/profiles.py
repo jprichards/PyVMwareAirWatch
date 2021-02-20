@@ -1,10 +1,13 @@
-class Profiles(object):
+from .mdm import MDM
+
+
+class Profiles(MDM):
     """
     A class to manage V2 API's for AirWatch Profiles Management
     """
 
     def __init__(self, client):
-        self.client = client
+        MDM.__init__(self, client)
 
     def search(self, **kwargs):
         """
@@ -20,15 +23,20 @@ class Profiles(object):
             status={status}
             ownership={ownership}
         """
-        response = self._get(path='/profiles/search', params=kwargs)
-        return response
+        return MDM._get(self, path='/profiles/search', params=kwargs)
 
-    def _get(self, module='mdm', path=None, version=None, params=None, header=None):
-        """GET requests for the /MDM/Profiles module."""
-        response = self.client.get(module=module, path=path, version=version, params=params, header=header)
-        return response
+    def install_profile(self, device_id, profile_id, payloads=None):
+        """
+        Queues up installation commands for interactive
+        profiles for a device by overriding payload settings.
+        """
+        path = '/devices/{}/commands/installprofile'.format(device_id)
+        query = 'profileid=' + str(profile_id)
+        return MDM._post(self, path=path, params=query)
 
-    def _post(self, module='mdm', path=None, version=None, params=None, data=None, json=None, header=None):
-        """POST requests for the /MDM/Profiles module."""
-        response = self.client.post(module=module, path=path, version=version, params=params, data=data, json=json, header=header)
-        return response
+    def get_profile_by_id(self, profile_id):
+        return MDM._get(self, path='/profiles/{}'.format(profile_id), version=2)
+
+    def get_payload_keys(self, platform, payload):
+        path = '/profiles/platforms/{}/payloads/{}/getpayloadkeys'.format(platform, payload)
+        return MDM._get(self, path=path, version=2)

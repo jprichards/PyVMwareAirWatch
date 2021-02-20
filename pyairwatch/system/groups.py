@@ -1,15 +1,19 @@
-class Groups(object):
+from .system import System
+import json
+
+
+class Groups(System):
     """
     A class to manage all core functionalities for AirWatch Organization Groups.
     """
     jheader = {'Content-Type': 'application/json'}
 
     def __init__(self, client):
-        self.client = client
+        System.__init__(self, client)
 
     def search(self, **kwargs):
         """Returns the Groups matching the search parameters."""
-        response = self._get(path='/groups/search', params=kwargs)
+        response = System._get(self, path='/groups/search', params=kwargs)
         return response
 
     def get_id_from_groupid(self, groupid):
@@ -17,14 +21,27 @@ class Groups(object):
         response = self.search(groupid=str(groupid))
         return response['LocationGroups'][0]['Id']['Value']
 
+    def get_groupid_from_id(self, id):
+        """Returns the Group ID for a given ID"""
+        response = System._get(self, path='/groups/{}'.format(id))
+        return response['GroupId']
+
+    def get_uuid_from_groupid(self, id):
+        """Returns the OG UUID for a given Group ID"""
+        response = System._get(self, path='/groups/{}'.format(id))
+        return response['Uuid']
+
     def create(self, parent_id, ogdata):
         """Creates a Group and returns the new ID."""
-        response = self._post(path='/groups/{}'.format(parent_id), data=ogdata, header=self.jheader)
+        response = System._post(self, path='/groups/{}'.format(parent_id),
+                                data=ogdata, header=self.jheader)
         return response
 
     def create_customer_og(self, groupid, name=None):
-        """Creates a Customer type OG, with a given Group ID and Name, and returns the new ID"""
-        import json
+        """
+        Creates a Customer type OG, with a given Group ID and Name, and returns
+        the new ID
+        """
         new_og = {'GroupId': str(groupid),
                   'Name': str(name),
                   'LocationGroupType': 'Customer'}
@@ -34,8 +51,10 @@ class Groups(object):
         return response.get('Value')
 
     def create_child_og(self, parent_groupid, groupid, og_type=None, name=None):
-        """Creates a Child OG for a given Parent Group ID, with a given Type, Group ID, and Name, and returns the new ID"""
-        import json
+        """
+        Creates a Child OG for a given Parent Group ID, with a given Type,
+        Group ID, and Name, and returns the new ID
+        """
         pid = self.get_id_from_groupid(parent_groupid)
         new_og = {'GroupId': str(groupid),
                   'Name': str(name),
@@ -46,13 +65,3 @@ class Groups(object):
             new_og['LocationGroupType'] = 'Container'
         response = self.create(parent_id=pid, ogdata=json.dumps(new_og))
         return response.get('Value')
-
-    def _get(self, module='system', path=None, version=None, params=None, header=None):
-        """GET requests for the /System/Groups module."""
-        response = self.client.get(module=module, path=path, version=version, params=params, header=header)
-        return response
-
-    def _post(self, module='system', path=None, version=None, params=None, data=None, json=None, header=None):
-        """POST requests for the /System/Groups module."""
-        response = self.client.post(module=module, path=path, version=version, params=params, data=data, json=json, header=header)
-        return response

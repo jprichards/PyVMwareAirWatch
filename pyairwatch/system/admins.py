@@ -1,7 +1,10 @@
-class Admins(object):
+from .system import System
+
+
+class Admins(System):
 
     def __init__(self, client):
-        self.client = client
+        System.__init__(self, client)
 
     def search(self, **kwargs):
         """
@@ -17,15 +20,13 @@ class Admins(object):
             organizationgroupid={locationgroupid}
             role={role}
         """
-        response = self._get(path='/admins/search', params=kwargs)
+        response = System._get(self, path='/admins/search', params=kwargs)
         return response
 
-    def _get(self, module='system', path=None, version=None, params=None, header=None):
-        """GET requests for the /System/Admins module."""
-        response = self.client.get(module=module, path=path, version=version, params=params, header=header)
-        return response
-
-    def _post(self, module='system', path=None, version=None, params=None, data=None, json=None, header=None):
-        """POST requests for the /System/Admins module."""
-        response = self.client.post(module=module, path=path, version=version, params=params, data=data, json=json, header=header)
+    def create_admin_v1(self, user_data):
+        """
+        Performs necessary checks and Create a new basic Admin user.
+        """
+        path = '/admins/addadminuser'
+        response = System._post(self, path=path, data=user_data)
         return response

@@ -1,9 +1,12 @@
-class Users(object):
+from .system import System
+
+
+class Users(System):
 
     def __init__(self, client):
-        self.client = client
+        System.__init__(self, client)
 
-    #UNTESTED
+    # UNTESTED
     def search(self, **kwargs):
         """
         Returns the Enrollment User's details matching the search parameters
@@ -18,15 +21,12 @@ class Users(object):
             organizationgroupid={locationgroupid}
             role={role}
         """
-        response = self._get(path='/users/search', params=kwargs)
-        return response
+        return System._get(self, path='/users/search', params=kwargs)
 
-    def _get(self, module='system', path=None, version=None, params=None, header=None):
-        """GET requests for the /System/Users module."""
-        response = self.client.get(module=module, path=path, version=version, params=params, header=header)
-        return response
-
-    def _post(self, module='system', path=None, version=None, params=None, data=None, json=None, header=None):
-        """POST requests for the /System/Users module."""
-        response = self.client.post(module=module, path=path, version=version, params=params, data=data, json=json, header=header)
+    def create_device_registration_to_user(self, user_id, register_device_details):
+        """
+        Creates a registration record for a user with the provided device details
+        """
+        path = '/users{}/registerdevice'.format(user_id)
+        response = System._post(path=path, data=register_device_details)
         return response

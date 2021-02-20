@@ -1,0 +1,8 @@
+{
+  "enviroment_name" : {
+    "server" : "apitest.awmdmd.com",
+    "apikey" : "apikey",
+    "username" : "admin_user",
+    "password" : "password"
+  }
+}
