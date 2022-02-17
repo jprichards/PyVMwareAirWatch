@@ -32,7 +32,6 @@ class Devices(object):
         self, serialnumber=None, macaddress=None, udid=None, imeinumber=None, easid=None
     ):
         """Returns the Device information matching the search parameters."""
-        params = {}
         if serialnumber:
             response = self.search(searchby="Serialnumber", id=str(serialnumber))
         elif macaddress:
