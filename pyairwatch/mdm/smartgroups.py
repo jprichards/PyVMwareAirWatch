@@ -18,6 +18,14 @@ class SmartGroups(object):
             managedbyorganizationgroupid={managedbyorganizationgroupid}
         """
         response = self._get(path='/smartgroups/search', params=kwargs)
+        page = 1
+        while isinstance(response, dict) and page * response["PageSize"] < response["Total"]:
+            kwargs["page"] = page
+            new_page = self._get(path='/smartgroups/search', params=kwargs)
+            if isinstance(new_page, dict):
+                response["SmartGroups"].append(new_page.get("SmartGroups", []))
+                response["Page"] = page
+            page += 1
         return response
 
     def get_details(self, id, **kwargs):

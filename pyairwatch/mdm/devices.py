@@ -14,6 +14,15 @@ class Devices(object):
     def search_all(self, **kwargs):
         """Returns the Devices matching the search parameters."""
         response = self._get(path='/devices/search', params=kwargs)
+        page = 1
+        while isinstance(response, dict) and page * response["PageSize"] < response["Total"]:
+            kwargs["page"] = page
+            new_page = self._get(path='/devices/search', params=kwargs)
+            if isinstance(new_page, dict):
+                response["Devices"].append(new_page.get("Devices", []))
+                response["Page"] = page
+            page += 1
+
         return response
 
     def get_details_by_alt_id(self, serialnumber=None, macaddress=None, udid=None, imeinumber=None, easid=None):

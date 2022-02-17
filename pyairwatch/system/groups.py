@@ -10,6 +10,14 @@ class Groups(object):
     def search(self, **kwargs):
         """Returns the Groups matching the search parameters."""
         response = self._get(path='/groups/search', params=kwargs)
+        page = 1
+        while isinstance(response, dict) and page * response["PageSize"] < response["Total"]:
+            kwargs["page"] = page
+            new_page = self._get(path='/groups/search', params=kwargs)
+            if isinstance(new_page, dict):
+                response["Groups"].append(new_page.get("Groups", []))
+                response["Page"] = page
+            page += 1
         return response
 
     def get_id_from_groupid(self, groupid):

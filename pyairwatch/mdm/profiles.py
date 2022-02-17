@@ -21,6 +21,14 @@ class Profiles(object):
             ownership={ownership}
         """
         response = self._get(path='/profiles/search', params=kwargs)
+        page = 1
+        while isinstance(response, dict) and page * response["PageSize"] < response["Total"]:
+            kwargs["page"] = page
+            new_page = self._get(path='/profiles/search', params=kwargs)
+            if isinstance(new_page, dict):
+                response["Profiles"].append(new_page.get("Profiles", []))
+                response["Page"] = page
+            page += 1
         return response
 
     def _get(self, module='mdm', path=None, version=None, params=None, header=None):

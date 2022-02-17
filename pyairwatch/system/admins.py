@@ -18,6 +18,14 @@ class Admins(object):
             role={role}
         """
         response = self._get(path='/admins/search', params=kwargs)
+        page = 1
+        while isinstance(response, dict) and page * response["PageSize"] < response["Total"]:
+            kwargs["page"] = page
+            new_page = self._get(path='/admins/search', params=kwargs)
+            if isinstance(new_page, dict):
+                response["Admins"].append(new_page.get("Admins", []))
+                response["Page"] = page
+            page += 1
         return response
 
     def _get(self, module='system', path=None, version=None, params=None, header=None):
