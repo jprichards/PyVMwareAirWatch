@@ -17,25 +17,38 @@ class SmartGroups(object):
             organizationgroupid={organizationgroupid}
             managedbyorganizationgroupid={managedbyorganizationgroupid}
         """
-        response = self._get(path='/smartgroups/search', params=kwargs)
+        response = self._get(path="/smartgroups/search", params=kwargs)
+        page = 1
+        while (
+            isinstance(response, dict)
+            and page * response["PageSize"] < response["Total"]
+        ):
+            kwargs["page"] = page
+            new_page = self._get(path="/smartgroups/search", params=kwargs)
+            if isinstance(new_page, dict):
+                response["SmartGroups"].append(new_page.get("SmartGroups", []))
+                response["Page"] = page
+            page += 1
         return response
 
     def get_details(self, id, **kwargs):
         """Retrieves the Smart Group details created in an Organization Group"""
-        response = self._get(path='/smartgroups/{}'.format(id), params=kwargs)
+        response = self._get(path="/smartgroups/{}".format(id), params=kwargs)
         return response
 
     def get_devices(self, id, **kwargs):
         """Retrieves all devices from Smart Group"""
-        devices = self._get(path='/smartgroups/{}/devices'.format(id), params=kwargs)
+        devices = self._get(path="/smartgroups/{}/devices".format(id), params=kwargs)
         return devices
 
     def get_id_from_og_id(self, og_id, sg_name):
         """Returns the Smart Group ID for a given SG Name & OG ID"""
-        response = self.search(managedbyorganizationgroupid=str(og_id), orderby='smartgroupid')
-        for keys in response['SmartGroups']:
-            if keys['Name'] == sg_name:
-                sg_id = keys.get('SmartGroupID')
+        response = self.search(
+            managedbyorganizationgroupid=str(og_id), orderby="smartgroupid"
+        )
+        for keys in response["SmartGroups"]:
+            if keys["Name"] == sg_name:
+                sg_id = keys.get("SmartGroupID")
                 return sg_id
 
     def move_device_to_sg(self, sg_id, device_id, device_name):
@@ -43,29 +56,69 @@ class SmartGroups(object):
         # sg_details = self.get_details(sg_id)
         # print type(sg_details)
         sg_details = {}
-        sg_details[u'DeviceAdditions'] = [{u'Id': str(device_id).decode(), u'Name': str(device_name).decode()}]
+        sg_details[u"DeviceAdditions"] = [
+            {u"Id": str(device_id).decode(), u"Name": str(device_name).decode()}
+        ]
         print(sg_details)
         # device = {'DeviceAdditions':[{ 'Id':'{}'.format(device_id)}]}
-        response = self._post(path='/smartgroups/{}/update'.format(str(sg_id)), data=sg_details)
+        response = self._post(
+            path="/smartgroups/{}/update".format(str(sg_id)), data=sg_details
+        )
 
         d = self.get_details(sg_id)
         print(d)
 
         return response
 
-    def _get(self, module='mdm', path=None, version=None, params=None, header=None):
+    def _get(self, module="mdm", path=None, version=None, params=None, header=None):
         """GET requests for the /MDM/SmartGroups module."""
-        response = self.client.get(module=module, path=path, version=version, params=params, header=header)
+        response = self.client.get(
+            module=module, path=path, version=version, params=params, header=header
+        )
         return response
 
-    def _post(self, module='mdm', path=None, version=None, params=None, data=None, json=None, header=None):
+    def _post(
+        self,
+        module="mdm",
+        path=None,
+        version=None,
+        params=None,
+        data=None,
+        json=None,
+        header=None,
+    ):
         """POST requests for the /MDM/SmartGroups module."""
-        response = self.client.post(module=module, path=path, version=version, params=params, data=data, json=json, header=header)
+        response = self.client.post(
+            module=module,
+            path=path,
+            version=version,
+            params=params,
+            data=data,
+            json=json,
+            header=header,
+        )
         return response
 
-    def _put(self, module='mdm', path=None, version=None, params=None, data=None, json=None, header=None):
+    def _put(
+        self,
+        module="mdm",
+        path=None,
+        version=None,
+        params=None,
+        data=None,
+        json=None,
+        header=None,
+    ):
         """PUT requests for the /MDM/SmartGroups module."""
-        response = self.client.put(module=module, path=path, version=version, params=params, data=data, json=json, header=header)
+        response = self.client.put(
+            module=module,
+            path=path,
+            version=version,
+            params=params,
+            data=data,
+            json=json,
+            header=header,
+        )
         return response
 
     # Inconsistent behaviors during testing, commenting out these methods for now:
